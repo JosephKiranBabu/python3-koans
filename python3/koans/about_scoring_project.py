@@ -33,9 +33,45 @@ from runner.koan import *
 # Your goal is to write the score method.
 
 def score(dice):
-    # You need to write this method
-    pass
+    def add_scores(): return sum(map(score_1, dice))
+    if len(dice) == 0:
+        return 0
+    elif len(dice) < 3:
+        return add_scores()
+    else:
+        n = has_3_identical(dice)
+        def calc_sum(remainder):
+            if n == 1:
+                return 1000 + remainder
+            else:
+                return n*100 + remainder
+        if n != 0:
+            if has_all_identical(dice):
+                return calc_sum((len(dice) - 3)*score_1(dice[0]))
+            else:
+                return calc_sum(sum(map(score_1, remove_3(dice, n))))
+        else:
+            return add_scores()
 
+def score_1(i): return {1: 100, 5: 50}.get(i, 0)
+
+def has_3_identical(seq):
+    for i in range(1,7):
+        if len(list(filter(lambda n: n == i, seq))) >= 3:
+            return i
+    return 0
+
+def remove_3(seq, elem):
+    for _ in range(3): seq.remove(elem)
+    return seq
+
+def has_all_identical(seq):
+    for i in range(1,len(seq)):
+        if seq[i-1] != seq[1]: return False
+    return True
+
+
+# Test cases start from here
 class AboutScoringProject(Koan):
     def test_score_of_an_empty_list_is_zero(self):
         self.assertEqual(0, score([]))

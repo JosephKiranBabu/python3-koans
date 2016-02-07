@@ -18,7 +18,21 @@
 #
 def triangle(a, b, c):
     # DELETE 'PASS' AND WRITE THIS CODE
-    pass
+    list = [a, b, c]
+    for elem in list:
+        if elem <= 0:
+            raise TriangleError
+
+    sortedList = sorted(list)
+    if (sortedList[0] + sortedList[1]) < sortedList[2]:
+        raise TriangleError
+
+    if a == b and b == c:
+        return 'equilateral'
+    elif ((a == b or a == c) and b != c) or (b == c and a != c):
+        return 'isosceles'
+    else:
+        return 'scalene'
 
 # Error class used in part 2.  No need to change this code.
 class TriangleError(Exception):
